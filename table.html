@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/layer.css" rel="stylesheet">
+    <link href="./css/select2.min.css" rel="stylesheet">
+    <style>
+        .mydropdown li {
+            display: block;
+        }
+
+        .mydropdown li>a,
+        .mydropdown li>span {
+            display: block;
+            padding: 5px 14px;
+            border: 0;
+            border-radius: 0;
+        }
+
+        .bootstrap-table .table,
+        .bootstrap-table .table>tbody>tr>th,
+        .bootstrap-table .table>tfoot>tr>th,
+        .bootstrap-table .table>thead>tr>td,
+        .bootstrap-table .table>tbody>tr>td,
+        .bootstrap-table .table>tfoot>tr>td {
+            padding: 8px !important;
+        }
+
+        .bootstrap-table .table {
+            margin-bottom: 0 !important;
+            border: 1px solid #dddddd;
+            border-collapse: collapse !important;
+            border-radius: 1px;
+        }
+
+        .bootstrap-table .table>thead>tr>th {
+            vertical-align: bottom;
+            border: 1px solid #ddd;
+        }
+
+        .table>thead>tr>th,
+        .table>tbody>tr>th,
+        .table>tfoot>tr>th,
+        .table>thead>tr>td,
+        .table>tbody>tr>td,
+        .table>tfoot>tr>td {
+            padding: 8px;
+            line-height: 1.42857143;
+            vertical-align: top;
+            border: 1px solid #ddd;
+        }
+
+        .pagination {
+            margin: 0;
+        }
+
+        .fixed-table-pagination .pagination-detail {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .fixed-table-pagination div.pagination,
+        .fixed-table-pagination .pagination-detail {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .pagination>.active>a,
+        .pagination>.active>a:focus,
+        .pagination>.active>a:hover,
+        .pagination>.active>span,
+        .pagination>.active>span:focus,
+        .pagination>.active>span:hover {
+            border-radius: 0;
+        }
+
+        .pagination>li>a,
+        .pagination>li>span {
+            border-radius: 0;
+            padding: 6px 12px;
+        }
+
+        .pager {
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .table-striped th {
+            white-space: nowrap;
+        }
+
+        .bootstrap-table .table>tbody>tr>td {
+            vertical-align: bottom;
+            border: 1px solid #ddd;
+        }
+
+        .table>thead>tr>th {
+            vertical-align: bottom;
+            border: 1px solid #ddd !important;
+        }
+
+        .bootstrap-table .table>tbody>tr>td[data-v-6dc320a8] {
+            vertical-align: top;
+        }
+
+        #editlayer {
+            padding: 20px;
+            white-space: nowrap;
+        }
+
+        .mock {
+            z-index: 4;
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50px);
+        }
+
+        .mock img {
+            width: 100px;
+            height: 100px;
+            animation: xz 0.8s linear infinite;
+            -webkit-animation: xz 0.8s linear infinite;
+        }
+
+        @-webkit-keyframes xz {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            25% {
+                -webkit-transform: rotate(90deg);
+            }
+
+            50% {
+                -webkit-transform: rotate(180deg);
+            }
+
+            75% {
+                -webkit-transform: rotate(270deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes xz {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            25% {
+                -webkit-transform: rotate(90deg);
+            }
+
+            50% {
+                -webkit-transform: rotate(180deg);
+            }
+
+            75% {
+                -webkit-transform: rotate(270deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        .select2-container {
+            min-width: 100px;
+            width: auto !important;
+        }
+
+        .select2-container--default .select2-selection--multiple {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 0;
+            cursor: text;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="app">
+        <div id="toolbar" class="panel panel-default" style="margin:5 0 0 5;">
+            <div class="panel-body">
+                <div class="form-inline" role="form" id="form">
+                    <div class="input-group" style="width: 300px;margin-bottom: 5px;">
+                        <span class="input-group-addon">&nbsp;&nbsp;用户名&nbsp;&nbsp;</span>
+                        <input id="ghxm" class="form-control" style="width:200px;margin-right: 5px;"
+                            v-model="search_name" />
+                    </div>
+                    <div class="input-group" style="width: 300px;margin-bottom: 5px;">
+                        <span class="input-group-addon">&nbsp;&nbsp;有效天数&nbsp;&nbsp;</span>
+                        <select id="xnxq" class="form-control" style="width:200px;margin-right: 5px;"
+                            v-model="availableday">
+                            <option value>--请选择--</option>
+
+                            <option value="1">1</option>
+
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+
+
+
+                    <div class="input-group" style="margin-bottom: 5px;">
+                        <span class="input-group-addon">角色</span>
+                        <select class="js-example-basic-multiple" multiple="multiple" id="sel">
+                            <option value="普通用户">普通用户</option>
+                            <option value="测试">测试</option>
+                            <option value="管理员">管理员</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="button" id="searchBtn" class="btn btn-success btn-sm" @click="search">
+                            <i class="fa fa-search"></i>查询
+                        </button>
+                        <button type="button" id="exportBtn" class="btn btn-primary btn-sm" @click="exportExcel">
+                            <i class="fa fa-search"></i>导出
+                        </button>
+                        <button type="button" id="editBtn" class="btn btn-info btn-sm" @click="edittable">
+                            <i class="fa fa-edit"></i>编辑
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tTable container body-content">
+            <div class="form-group">
+                <div class="form-group">
+                    <div class="bootstrap-table">
+                        <div class="fixed-table-toolbar"></div>
+                        <div class="fixed-table-container" style="padding-bottom: 0px;">
+
+                            <div class="fixed-table-body">
+
+                                <table id="datatable" class="table table-hover table-condensed table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="bs-checkbox" style="width: 36px; " data-field="status"
+                                                tabindex="0">
+                                                <div class="th-inner">
+                                                    <input name="btSelectAll" type="checkbox" @click="checkall"
+                                                        v-model="checked" />
+                                                </div>
+                                                <div class="fht-cell"></div>
+                                            </th>
+                                            <th style data-field="classname" tabindex="0">
+                                                <div class="th-inner">用户名</div>
+                                                <div class="fht-cell"></div>
+                                            </th>
+                                            <th style data-field="classno" tabindex="0">
+                                                <div class="th-inner">账号</div>
+                                                <div class="fht-cell"></div>
+                                            </th>
+                                            <th style data-field="stunumber" tabindex="0">
+                                                <div class="th-inner">有效天数</div>
+                                                <div class="fht-cell"></div>
+                                            </th>
+                                            <th style data-field="yearlimit" tabindex="0">
+                                                <div class="th-inner">是否有效</div>
+                                                <div class="fht-cell"></div>
+                                            </th>
+                                            <th style data-field="majorno" tabindex="0">
+                                                <div class="th-inner">角色</div>
+                                                <div class="fht-cell"></div>
+                                            </th>
+                                            <th style data-field="xq" tabindex="0">
+                                                <div class="th-inner">创建时间</div>
+                                                <div class="fht-cell"></div>
+                                            </th>
+                                            <th style data-field="xqmc" tabindex="0">
+                                                <div class="th-inner">状态</div>
+                                                <div class="fht-cell"></div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <td colspan="18" v-if="arrayData.length==0&&isloading==false"
+                                            style="text-align:center;background-color: #f9f9f9;padding:5px 0;border:1px solid #ddd;">
+                                            没有找到匹配的记录</td>
+                                        <tr data-index="index" v-for="(user,index) in arrayData" :key="index"
+                                            @click="chooseline(user.id)">
+                                            <td class="bs-checkbox">
+                                                <input data-index="0" name="btSelectItem" type="checkbox"
+                                                    :value="user.id" v-model="checkedNames"
+                                                    @click="checkchoose(user)" />
+                                            </td>
+                                            <td style>{{user.username}}</td>
+                                            <td style>{{user.account}}</td>
+                                            <td style>{{user.days}}</td>
+                                            <td style>{{user.isavailable}}</td>
+                                            <td style>{{user.perform}}</td>
+                                            <td style>{{user.createtime}}</td>
+                                            <td style>{{user.mstate}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <!-- <div class="fixed-table-footer" style="display: none;">
+                                <table>
+                                    <tbody>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div> -->
+                        </div>
+                    </div>
+
+                    <div class="pager" id="pager">
+                        <div class="fixed-table-pagination" style="display: block;">
+                            <div class="pull-left pagination-detail">
+                                <span class="pagination-info">
+                                    显示第 {{(pageCurrent-1)*pagesize+1}} 到第 {{pagesize*pageCurrent}} 条记录，总共 {{totalCount}}
+                                    条记录
+                                </span>
+                                <span class="page-list">
+                                    每页显示
+                                    <span class="btn-group dropup">
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown">
+                                            <span class="page-size">{{pagesize}}</span>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu mydropdown" role="menu" onchange="showPage(1)">
+                                            <template v-for="(item,index) in numbers">
+                                                <li class="item" :key="index" :class="{'checked' : index == pagesize }"
+                                                    @click="choose(item.name)">
+                                                    <a href="javascript:void(0)">{{ item.name }}</a></li>
+                                            </template>
+                                        </ul>
+                                    </span> 条记录
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="pull-right pagination">
+                            <ul class="pagination">
+                                <li class="page-first" v-on:click="showPage(1)">
+                                    <a href="javascript:void(0)">«</a>
+                                </li>
+                                <li class="page-pre" v-on:click="showPage(pageCurrent-1)">
+                                    <a href="javascript:void(0)">‹</a>
+                                </li>
+
+                                <template v-for="page in pages">
+                                    <li v-if="page === pageCurrent" class="page-number active" :key="page"
+                                        @click="showPage(page)">
+                                        <a href="javascript:void(0)">{{page}}</a>
+                                    </li>
+                                    <li v-else :key="page" class="page-number" @click="showPage(page)">
+                                        <a href="javascript:void(0)">{{page}}</a>
+                                    </li>
+                                </template>
+
+
+                                <li class="page-next" @click="showPage(pageCurrent+1)">
+                                    <a href="javascript:void(0)">›</a>
+                                </li>
+                                <li class="page-last" v-on:click="showPage(pageNum)">
+                                    <a href="javascript:void(0)">»</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="mock" v-if="isloading==true">
+                <img :src="imgurl" />
+            </div>
+        </div>
+
+        <div id="editlayer" style="display:none">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label for="firstname" class="col-sm-2 control-label">用户名</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="firstname" placeholder="请输入用户名"
+                            :value="getusername" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lastname" class="col-sm-2 control-label">有效天数</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="lastname" placeholder="请输入有效天数"
+                            :value="getavailableday" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-2">角色</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" v-model="getperfom">
+                            <option>普通用户</option>
+                            <option>测试</option>
+                            <option>管理员</option>
+                        </select>
+                    </div>
+                </div>
+       
+            </form>
+            <div style="width:100%;text-align:center">
+                <button type="button" class="btn btn-success">确认</button>
+                <button type="button" class="btn btn-default">取消</button>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <script src="./js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/layer.js"></script>
+    <script src="./js/xlsx.full.min.js"></script>
+    <script src="./js/select2.min.js"></script>
+    <script src="./js/export.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.js-example-basic-multiple').select2();
+
+        });</script>
+    <script>
+        var vn = new Vue({
+            el: "#app",
+            data: {
+                fDisabled: false,
+                lDisabled: false,
+                totalCount: 200,
+                pageCurrent: 1,
+                pagesize: 10,
+                //分页按钮数
+                showPages: 5,
+                showPagesStart: 1,
+                showPageEnd: 20,
+                totaldata: [],
+                savetotaldata: [],
+                arrayData: [],
+                savedata: [],
+                pages: [1, 2, 3, 4, 5],
+                numbers: [
+                    {
+                        name: 10,
+                        checked: true
+                    },
+                    {
+                        name: 20,
+                        checked: false
+                    },
+                    {
+                        name: 50,
+                        checked: false
+                    }
+                ],
+                checkedNames: [],
+                checked: false,
+                search_name: "",
+                availableday: "",
+                teacherno: "",
+                teachername: "",
+                departmentno: "",
+                getavailableday: '',
+                getperfom: '',
+                getusername: '',
+                imgurl: "./resources/loading.png",
+                isloading: true
+            },
+            created: function () {
+                var newPageInfo = [];
+                var name = ['张三', '李四', '王五', '杨六', '朱七', '卢八', '钱九', '陈十']
+                var root = ['管理员', '普通用户', '测试']
+                var time = new Date();
+                for (var i = 0; i < this.totalCount; i++) {
+                    newPageInfo[newPageInfo.length] = {
+                        username: name[Math.floor(Math.random() * 7 + 0)],
+                        account: 'a',
+                        days: Math.ceil(Math.random() * 3),
+                        isavailable: '有效',
+                        perform: root[Math.floor(Math.random() * 3+0)],
+                        createtime: time,
+                        mstate: '启用',
+                        id: i
+                    };
+                }
+                this.totaldata = newPageInfo;
+                this.savetotaldata = newPageInfo
+            },
+
+            methods: {
+                chooseline(id) {
+                    var newlist = this.checkedNames;
+                    if (newlist.indexOf(id) > -1) {
+                        var index = newlist.indexOf(id);
+                        newlist.splice(index, 1);
+                    } else {
+                        newlist.push(id);
+                    }
+                    this.checkedNames = newlist;
+                },
+                edittable() {
+                    if (this.checkedNames.length != 1) {
+                        alert("只能选择一项");
+                    } else {
+                        var checkedid = this.checkedNames[0];
+                        console.log(checkedid);
+                        var message = this.savetotaldata[checkedid];
+                        this.getusername = message.username;
+                        this.getavailableday = message.days;
+                        this.getperfom = message.perform;
+                        console.log(message);
+                        layer.open(
+                            {
+                                type: 1,
+                                title: "编辑",
+                                content: $("#editlayer"),
+                                shadeClose: true,
+                                area: ["500px"],
+                                closeBtn: 1
+                            },
+                            function () {
+                                console.log("22");
+                            },
+                            function () {
+                                layer.msg("取消");
+                            }
+                        );
+                    }
+                },
+                search() {
+                    const multichoose = $("#sel").val();
+                    const search_name = this.search_name;
+                    const availableday = this.availableday;
+                    var newlist;
+                    if ((search_name && search_name != "") || availableday || multichoose) {
+                        newlist = this.savetotaldata.filter(data => {
+                            return Object.keys(data).some(key => {
+                                return String(data["username"]).indexOf(search_name) > -1;
+                            });
+                        });
+                        if (availableday || multichoose) {
+                            newlist = newlist.filter(data => {
+                                return Object.keys(data).some(key => {
+                                    return String(data["days"]).indexOf(availableday) > -1;
+                                });
+                            });
+                            console.log(newlist)
+                            if (multichoose&&multichoose.length!=0) {
+                                var choose = []
+                                var result = []
+                                for (let i = 0; i < multichoose.length; i++) {
+                                    console.log(multichoose[i])
+                                    choose= newlist.filter(data => {
+                                        return Object.keys(data).some(key => {
+                                            return String(data["perform"]).indexOf(multichoose[i]) > -1;
+                                        });
+                                    });
+                                    result = result.concat(choose)
+                                }
+                                newlist = result
+                            }
+                        }
+                    } else {
+                        newlist = this.savetotaldata;
+                    }
+                    console.log("总数据")
+                    //  console.log(newlist)
+                    
+                    this.totaldata = newlist;
+                    this.showPage(1)
+                },
+
+                exportExcel() {
+                    var table1 = document.querySelector("#datatable");
+                    var sheet = XLSX.utils.table_to_sheet(table1);//将一个table对象转换成一个sheet对象
+                    openDownloadDialog(sheet2blob(sheet), '下载.xlsx');
+
+                },
+                formatJson(filterVal, jsonData) {
+                    return jsonData.map(v => filterVal.map(j => v[j]));
+                },
+                checkchoose(item) {
+                    item.state = !item.state;
+                    console.log(item.state);
+                    var length = this.checkedNames.length
+                    if (item.state == true) {
+                        length -= 1
+                    }
+                    else {
+                        length += 1
+                    }
+                    if (length == this.pagesize) {
+                        this.checked = true
+                    }
+                    else {
+                        this.checked = false
+                    }
+
+                },
+                checkall() {
+                    if (this.checked) {
+                        this.checkedNames = []
+                        this.checked = false;
+                    }
+                    else {
+                        this.checkedNames = []
+                        var start = (this.pageCurrent - 1) * this.pagesize;
+                        var end = start + this.pagesize;
+                        console.log(start + " " + end)
+                        console.log(this.arrayData)
+
+                        for (let i = start; i < end; i++) {
+                            this.checkedNames.push(this.arrayData[i].id)
+                        }
+                        console.log(this.arrayData)
+                        this.checked = true;
+
+                
+                    }
+                },
+                choose(index) {
+                    //控制n的值，变为用户的选中
+                    this.pagesize = index;
+                    this.checkedNames = []
+                    this.currentPage = 1
+                    console.log("每页显示" + this.pagesize)
+                    this.showPage(1)
+                    console.log("当前总页数" + this.pageNum)
+
+                },
+                showPage: function (pageIndex) {
+                    this.checked = false
+                    this.checkedNames = []
+
+                    //初始化
+                    if (pageIndex >= 1 && pageIndex <= this.pageNum) {
+
+                        var start = (pageIndex - 1) * this.pagesize;
+                        var end = start + this.pagesize;
+
+                        //模拟异步请求
+                        setTimeout(() => {
+                            this.arrayData = this.totaldata.slice(start, end)
+                            this.savedata = this.arrayData
+                            this.isloading = false
+                            this.totalCount = this.totaldata.length
+                        }, 300);
+
+                       // console.log(this.arrayData)
+                        console.log("当前页数" + pageIndex + "总页数" + this.pageNum)
+
+                        if (pageIndex > 0 && pageIndex <= this.pageNum) {
+                            this.pageCurrent = pageIndex;
+                            let array = []
+                            var currentPage = this.pageCurrent
+                            console.log(currentPage)
+                            var total = this.pageNum
+                            if (currentPage >= 1 && currentPage <= total) {
+                                if (total < 5) {
+                                    //5页以内
+                                    for (var $i = 1; $i <= total; $i++) {
+                                        array.push($i);
+                                    }
+                                } else {
+                                    //大于5页
+                                    if (currentPage == 1) {
+                                        array = [
+                                            currentPage,
+                                            currentPage + 1,
+                                            currentPage + 2,
+                                            currentPage + 3,
+                                            currentPage + 4
+                                        ];
+                                    } else if (currentPage == 2) {
+                                        array = [
+                                            currentPage - 1,
+                                            currentPage,
+                                            currentPage + 1,
+                                            currentPage + 2,
+                                            currentPage + 3
+                                        ];
+                                    } else if (currentPage == total - 1) {
+                                        array = [
+                                            currentPage - 3,
+                                            currentPage - 2,
+                                            currentPage - 1,
+                                            currentPage,
+                                            total
+                                        ];
+                                    } else if (currentPage == total) {
+                                        array = [
+                                            currentPage - 4,
+                                            currentPage - 3,
+                                            currentPage - 2,
+                                            currentPage - 1,
+                                            currentPage
+                                        ];
+                                    } else {
+                                        array = [
+                                            currentPage - 2,
+                                            currentPage - 1,
+                                            currentPage,
+                                            currentPage + 1,
+                                            currentPage + 2
+                                        ];
+                                    }
+                                }
+                            }
+
+                            this.pages = array
+                          //  console.log(this.pages)
+                        }
+                    }
+                }
+
+            },
+            mounted: function () {
+                this.showPage(this.pageCurrent, null, true);
+            },
+            computed: {
+                pageNum() {
+                    return Math.ceil(this.totalCount / this.pagesize);
+                },
+
+            }
+        })
+    </script>
+</body>
+
+</html>
