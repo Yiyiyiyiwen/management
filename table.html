@@ -592,9 +592,7 @@
                     openDownloadDialog(sheet2blob(sheet), '下载.xlsx');
 
                 },
-                formatJson(filterVal, jsonData) {
-                    return jsonData.map(v => filterVal.map(j => v[j]));
-                },
+             
                 checkchoose(item) {
                     item.state = !item.state;
                     console.log(item.state);
